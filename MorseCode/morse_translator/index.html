@@ -1,36 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Morse Code Translator</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1 id="title">Morse Code Translator</h1>
-        <select id="languageSelector">
-          <option value="en">English</option>
-          <option value="zu">IsiZulu</option>
-          <option value="ts">Xitsonga</option>
-        </select>
-      </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Morse Code Translator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Morse Code Translator</h1>
 
-      <section id="translator">
-        <textarea
-        
-          placeholder="Translation will appear here"
-          readonly
-        ></textarea>
-      </section>
-
-      <section id="history">
-        <h2 id="historyTitle">Translation History</h2>
-        <ul id="historyList"></ul>
-      </section>
+    <div class="toggle">
+      <label><input type="radio" name="mode" value="text-to-morse" checked /> Text to Morse</label>
+      <label><input type="radio" name="mode" value="morse-to-text" /> Morse to Text</label>
     </div>
 
-    <script src="script.js"></script>
-  </body>
+    <textarea id="inputText" placeholder="Enter text or Morse code..."></textarea>
+    <textarea id="outputText" placeholder="Translation will appear here..." readonly></textarea>
+
+    <div class="buttons">
+      <button id="copyBtn">Copy</button>
+      <button id="clearBtn">Clear</button>
+      <button id="playAudioBtn">Play Morse</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
 </html>
