@@ -5,25 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Morse Code Translator</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
   <div class="container">
-    <h1>Morse Code Translator</h1>
-
-    <div class="toggle">
-      <label><input type="radio" name="mode" value="text-to-morse" checked /> Text to Morse</label>
-      <label><input type="radio" name="mode" value="morse-to-text" /> Morse to Text</label>
+    <div class="header">
+      <img src="https://cdn-icons-png.flaticon.com/512/3176/3176272.png" alt="Morse Code Icon" class="logo">
+      <h1>Morse Code Translator</h1>
+      <div class="theme-toggle">
+        <i class="fas fa-moon"></i>
+        <label class="switch">
+          <input type="checkbox" id="themeToggle">
+          <span class="slider round"></span>
+        </label>
+        <i class="fas fa-sun"></i>
+      </div>
     </div>
 
-    <textarea id="inputText" placeholder="Enter text or Morse code..."></textarea>
-    <textarea id="outputText" placeholder="Translation will appear here..." readonly></textarea>
+    <div class="mode-selector">
+      <div class="toggle">
+        <label class="toggle-option">
+          <input type="radio" name="mode" value="text-to-morse" checked />
+          <span class="toggle-btn"><i class="fas fa-keyboard"></i> Text to Morse</span>
+        </label>
+        <label class="toggle-option">
+          <input type="radio" name="mode" value="morse-to-text" />
+          <span class="toggle-btn"><i class="fas fa-wifi"></i> Morse to Text</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="text-areas">
+      <div class="input-section">
+        <div class="section-header">
+          <h3 id="inputLabel">Text Input</h3>
+          <div class="char-count" id="inputCount">0 chars</div>
+        </div>
+        <textarea id="inputText" placeholder="Enter text or Morse code..."></textarea>
+      </div>
+      
+      <button id="swapBtn" class="swap-btn" title="Swap translation direction">
+        <i class="fas fa-exchange-alt"></i>
+      </button>
+
+      <div class="output-section">
+        <div class="section-header">
+          <h3 id="outputLabel">Morse Code Output</h3>
+          <div class="char-count" id="outputCount">0 chars</div>
+        </div>
+        <textarea id="outputText" placeholder="Translation will appear here..." readonly></textarea>
+      </div>
+    </div>
 
     <div class="buttons">
-      <button id="copyBtn">Copy</button>
-      <button id="clearBtn">Clear</button>
-      <button id="playAudioBtn">Play Morse</button>
+      <button id="copyBtn" class="btn-icon">
+        <i class="far fa-copy"></i> Copy
+      </button>
+      <button id="clearBtn" class="btn-icon">
+        <i class="far fa-trash-alt"></i> Clear
+      </button>
+      <button id="playAudioBtn" class="btn-icon">
+        <i class="fas fa-volume-up"></i> Play Morse
+      </button>
+      <button id="flashBtn" class="btn-icon">
+        <i class="far fa-lightbulb"></i> Flash
+      </button>
+    </div>
+
+    <div class="morse-cheatsheet">
+      <h3><i class="fas fa-info-circle"></i> Morse Code Cheat Sheet</h3>
+      <div class="cheatsheet-grid" id="cheatsheet"></div>
     </div>
   </div>
+
+  <div class="particles" id="particles"></div>
 
   <script src="script.js"></script>
 </body>
