@@ -1,149 +1,76 @@
-// Morse Code Dictionary
-const morseCode = {
-  A: ".-",
-  B: "-...",
-  C: "-.-.",
-  D: "-..",
-  E: ".",
-  F: "..-.",
-  G: "--.",
-  H: "....",
-  I: "..",
-  J: ".---",
-  K: "-.-",
-  L: ".-..",
-  M: "--",
-  N: "-.",
-  O: "---",
-  P: ".--.",
-  Q: "--.-",
-  R: ".-.",
-  S: "...",
-  T: "-",
-  U: "..-",
-  V: "...-",
-  W: ".--",
-  X: "-..-",
-  Y: "-.--",
-  Z: "--..",
-  1: ".----",
-  2: "..---",
-  3: "...--",
-  4: "....-",
-  5: ".....",
-  6: "-....",
-  7: "--...",
-  8: "---..",
-  9: "----.",
-  0: "-----",
-  ".": ".-.-.-",
-  ",": "--..--",
-  "?": "..--..",
-  "'": ".----.",
-  "!": "-.-.--",
-  "/": "-..-.",
-  "(": "-.--.",
-  ")": "-.--.-",
-  "&": ".-...",
-  ":": "---...",
-  ";": "-.-.-.",
-  "=": "-...-",
-  "+": ".-.-.",
-  "-": "-....-",
-  _: "..--.-",
-  '"': ".-..-.",
-  $: "...-..-",
-  "@": ".--.-.",
-  " ": "/",
+const morseCodeMap = {
+  A: ".-", B: "-...", C: "-.-.", D: "-..", E: ".",
+  F: "..-.", G: "--.", H: "....", I: "..", J: ".---",
+  K: "-.-", L: ".-..", M: "--", N: "-.", O: "---",
+  P: ".--.", Q: "--.-", R: ".-.", S: "...", T: "-",
+  U: "..-", V: "...-", W: ".--", X: "-..-", Y: "-.--",
+  Z: "--..", 1: ".----", 2: "..---", 3: "...--",
+  4: "....-", 5: ".....", 6: "-....", 7: "--...",
+  8: "---..", 9: "----.", 0: "-----",
+  ' ': '/'
 };
 
-// Function to convert text to Morse code
-function textToMorse(text) {
-  return text
-    .toUpperCase()
-    .split("")
-    .map((char) => morseCode[char] || char)
-    .join(" ");
+const reverseMorseCodeMap = Object.fromEntries(
+  Object.entries(morseCodeMap).map(([key, value]) => [value, key])
+);
+
+const inputText = document.getElementById("inputText");
+const outputText = document.getElementById("outputText");
+const copyBtn = document.getElementById("copyBtn");
+const clearBtn = document.getElementById("clearBtn");
+const playAudioBtn = document.getElementById("playAudioBtn");
+const modeRadios = document.getElementsByName("mode");
+
+function translateText(text) {
+  return text.toUpperCase().split('').map(ch => morseCodeMap[ch] || '').join(' ');
 }
 
-// Function to convert Morse code to text
-function morseToText(morse) {
-  const reverseMorseCode = Object.fromEntries(
-    Object.entries(morseCode).map(([k, v]) => [v, k])
-  );
-  return morse
-    .split(" ")
-    .map((code) => reverseMorseCode[code] || code)
-    .join("");
+function translateMorse(morse) {
+  return morse.trim().split(' ').map(symbol => reverseMorseCodeMap[symbol] || '').join('');
 }
 
-// Function to update translation history
-function updateHistory(input, output) {
-  const history = JSON.parse(localStorage.getItem("history")) || [];
-  history.unshift({ input, output });
-  if (history.length > 5) history.pop(); // Keep only the last 5 translations
-  localStorage.setItem("history", JSON.stringify(history));
-  renderHistory();
+function getCurrentMode() {
+  return Array.from(modeRadios).find(r => r.checked).value;
 }
 
-// Function to render translation history
-function renderHistory() {
-  const historyList = document.getElementById("historyList");
-  const history = JSON.parse(localStorage.getItem("history")) || [];
-  historyList.innerHTML = "";
-  history.forEach((item) => {
-    const li = document.createElement("li");
-    li.textContent = `${item.input} → ${item.output}`;
-    historyList.appendChild(li);
-  });
+function updateTranslation() {
+  const mode = getCurrentMode();
+  const input = inputText.value;
+  outputText.value = mode === 'text-to-morse' ? translateText(input) : translateMorse(input);
 }
 
-// Event listeners
-document.getElementById("toMorse").addEventListener("click", () => {
-  const inputText = document.getElementById("inputText").value.trim();
-  if (inputText) {
-    const output = textToMorse(inputText);
-    document.getElementById("outputText").value = output;
-    updateHistory(inputText, output);
-  }
+inputText.addEventListener("input", updateTranslation);
+modeRadios.forEach(radio => radio.addEventListener("change", updateTranslation));
+
+copyBtn.addEventListener("click", () => {
+  navigator.clipboard.writeText(outputText.value);
 });
 
-document.getElementById("toText").addEventListener("click", () => {
-  const inputText = document.getElementById("inputText").value.trim();
-  if (inputText) {
-    const output = morseToText(inputText);
-    document.getElementById("outputText").value = output;
-    updateHistory(inputText, output);
-  }
+clearBtn.addEventListener("click", () => {
+  inputText.value = '';
+  outputText.value = '';
 });
 
-// Language selector
-document
-  .getElementById("languageSelector")
-  .addEventListener("change", (event) => {
-    const lang = event.target.value;
-    const title = document.getElementById("title");
-    const toMorseBtn = document.getElementById("toMorse");
-    const toTextBtn = document.getElementById("toText");
-    const historySection = document.getElementById("history");
+playAudioBtn.addEventListener("click", () => {
+  const morse = getCurrentMode() === 'text-to-morse' ? outputText.value : inputText.value;
+  const context = new (window.AudioContext || window.webkitAudioContext)();
+  let time = context.currentTime;
 
-    if (lang === "en") {
-      title.textContent = "Morse Code Translator";
-      toMorseBtn.textContent = "To Morse Code";
-      toTextBtn.textContent = "To Text";
-      historySection.querySelector("h2").textContent = "Translation History";
-    } else if (lang === "zu") {
-      title.textContent = "Umhumushi weKhowudi yeMorse";
-      toMorseBtn.textContent = "Kuya kwiMorse Code";
-      toTextBtn.textContent = "Kuya kwiText";
-      historySection.querySelector("h2").textContent = "Umlando Wokuhumusha";
-    } else if (lang === "ts") {
-      title.textContent = "Mutshino wa Kihumisi wa Morse";
-      toMorseBtn.textContent = "Kuya eka Morse Code";
-      toTextBtn.textContent = "Kuya eka Text";
-      historySection.querySelector("h2").textContent = "Nhluvuko wa Ku Humesa";
-    }
+  morse.split('').forEach(symbol => {
+    if (symbol === '.') playBeep(context, time, 0.1);
+    else if (symbol === '-') playBeep(context, time, 0.3);
+    time += 0.4;
   });
+});
 
-// Initialize history on page load
-document.addEventListener("DOMContentLoaded", renderHistory);
+function playBeep(context, startTime, duration) {
+  const oscillator = context.createOscillator();
+  const gain = context.createGain();
+  oscillator.connect(gain);
+  gain.connect(context.destination);
+  oscillator.frequency.value = 600;
+  gain.gain.setValueAtTime(1, startTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+  oscillator.start(startTime);
+  oscillator.stop(startTime + duration);
+}
