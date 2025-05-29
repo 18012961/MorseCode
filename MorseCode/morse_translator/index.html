@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Morse Code Translator</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1 id="title">Morse Code Translator</h1>
+        <select id="languageSelector">
+          <option value="en">English</option>
+          <option value="zu">IsiZulu</option>
+          <option value="ts">Xitsonga</option>
+        </select>
+      </header>
+
+      <section id="translator">
+        <textarea
+        
+          placeholder="Translation will appear here"
+          readonly
+        ></textarea>
+      </section>
+
+      <section id="history">
+        <h2 id="historyTitle">Translation History</h2>
+        <ul id="historyList"></ul>
+      </section>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
